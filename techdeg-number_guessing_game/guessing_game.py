@@ -11,67 +11,19 @@ NOTE: If you strongly prefer to work locally on your own computer, you can total
 
 import random
 
-def reset_attempts():
-    return 0 
-
-def get_random_num():
-    return random.randint(1,10) 
-
-def game_menu():
-    while True:
-        try:
-            choice = str(input("Press (R) to resume the game or (Q) to quit game:  "))
-        except:
-            print(choice)
-        else:
-            print(choice)
-
+def attempt_rst():
+    return 0
+    
+def game_intro():
+    print("""
+===================================
+Let's play the number guessing game!
+===================================
+    """)
+    return random.randint(1,10)
 
 def start_game():
-    print("""
-------------------------------------
-Welcome to the number guessing game!
-------------------------------------
-
-""")
-    high_score = 11
-    random_num = get_random_num()
-    attempt = reset_attempts()
-    while True:
-        try:
-            user_guess = int(input("Please guess a number between 1-10, or 0 for menu:  "))
-        except NameError:
-            print("""That's not a number, try again.
-            """)
-        else:
-            if user_guess >= 1 and user_guess <= 10:
-                attempt += 1 
-                if user_guess == random_num:
-                    print("""Congrats, you solved the riddle in {} attempts!
-                    """.format(attempt))
-                    if attempt < high_score:
-                        high_score = attempt
-                        print("You've solved in {} tries. High score is {}".format(attempt, high_score))
-                    else:
-                        print("You've solved in {} tries. High score is {}.".format(attempt, high_score))
-                    # High score logic goes here
-                    attempt = reset_attempts()
-                    random_num = get_random_num()
-                elif user_guess > random_num:
-                    print("""Good guess, try something lower.
-                    """)
-                elif user_guess < random_num:
-                    print("""Good guess, try something higher.
-                    """)
-            elif user_guess == 0:
-                game_menu() 
-            else:
-                print("""Number must be between 1-10!
-                """)
-                continue
-
-
-"""Psuedo-code Hints
+    """Psuedo-code Hints
     
     When the program starts, we want to:
     ------------------------------------
@@ -88,6 +40,55 @@ Welcome to the number guessing game!
     ( You can add more features/enhancements if you'd like to. )
     """
     # write your code inside this function.
+    random_num = game_intro()
+    print("""You are the first player, no high score exists!
+            """)
+    attempt = attempt_rst()
+    high_score = 11
+    while True:
+        response = input("Please enter a number between 1-10:  ")
+        try:
+            response = int(response)
+        except ValueError:
+            print("That's not a number!")
+        else:
+            if response >= 1 and response <= 10:
+                attempt += 1
+                if response == random_num:
+                    if attempt == 1:
+                        print("Wow! You won the game in {} attempt!!".format(attempt))
+                    else:
+                        print("Nice! You guessed correctly in {} attempts".format(attempt))
+                    if attempt < high_score:
+                        print("""You've set a new high score! High score: {}
+                                """.format(attempt))
+                        high_score = attempt
+                    elif attempt > high_score:
+                        print("""High score: {}
+                                """.format(high_score))
+                    response = input("Would you like to play again? (y/n):  ")
+                    response = str(response)
+                    if response == 'y':
+                        print("Great, lets go!")
+                        random_num = game_intro()
+                        attempt = attempt_rst()
+                        continue
+                    elif response == 'n':
+                        print("Have a great day! Exiting.")
+                        break
+                    else:
+                        print("Invalid response, exiting game.")
+                        break
+                elif response > random_num:
+                    print("""It's lower.
+                           """)
+                elif response < random_num:
+                    print("""It's higher.
+                            """)
+            else:
+                print("Try again!")
+
+
 
 
 if __name__ == '__main__':
